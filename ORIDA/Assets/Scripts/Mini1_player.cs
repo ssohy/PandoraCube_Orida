@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Mini1_player : MonoBehaviour
 {
+    
     public bool isTouchTop;
     public bool isTouchBottom;
     public bool isTouchLeft;
     public bool isTouchRight;
+    
 
     public int life; // 목숨
     public int score; // 점수
@@ -31,28 +33,22 @@ public class Mini1_player : MonoBehaviour
     public GameObject bulletObjB; // 총알 오브젝트B
     public GameObject boomEffect;
 
-    public GameObject[] followers;
+    //public bool isRespawnTime;
 
-    public bool[] joyControl;
-    public bool isControl;
-    public bool isButtonA;
-    public bool isButtonB;
-    public bool isRespawnTime;
-
-    Animator anim;
     SpriteRenderer spriteRenderer;
     void Awake()
     {
-        anim = GetComponent<Animator>();
+        //anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void OnEnable() // 죽었을 때 무적상태
     {
-        Unbeatable();
-        Invoke("Unbeatable", 3);
+        //Unbeatable();
+        //Invoke("Unbeatable", 3);
     }
 
+    /*
     void Unbeatable()
     {
         isRespawnTime = !isRespawnTime;
@@ -64,53 +60,23 @@ public class Mini1_player : MonoBehaviour
         {
             spriteRenderer.color = new Color(1, 1, 1, 1);
         }
-    }
+    }*/
     void Update()
     {
         Move();
-        Fire();
-        Boom();
-        Reload();
+        //Fire();
+        ///Boom();
+        //Reload();
     }
 
-    public void JoyPanel(int type)
-    {
-        for (int index = 0; index < 9; index++)
-        {
-            joyControl[index] = (index == type);
-        }
-    }
-
-    public void JoyDown()
-    {
-        isControl = true;
-    }
-    public void JoyUp()
-    {
-        isControl = false;
-    }
     void Move() //이동
     {
-        //#.Keyboard Control Value
         float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        //#.Joy Control Value
-        if (joyControl[0]) { h = -1; v = 1; }
-        if (joyControl[1]) { h = 0; v = 1; }
-        if (joyControl[2]) { h = 1; v = 1; }
-        if (joyControl[3]) { h = -1; v = 0; }
-        if (joyControl[4]) { h = 0; v = 0; }
-        if (joyControl[5]) { h = 1; v = 0; }
-        if (joyControl[6]) { h = -1; v = -1; }
-        if (joyControl[7]) { h = 0; v = -1; }
-        if (joyControl[8]) { h = 1; v = -1; }
-
-
-
-        if ((isTouchRight && h == 1) || (isTouchLeft && h == -1) || !isControl)
+        if ((isTouchRight && h == 1) || (isTouchLeft && h == -1))
             h = 0;
-        if ((isTouchTop && v == 1) || (isTouchBottom && v == -1) || !isControl)
+
+        float v = Input.GetAxisRaw("Vertical");
+        if ((isTouchTop && v == 1) || (isTouchBottom && v == -1))
             v = 0;
 
         Vector3 curPos = transform.position;
@@ -118,38 +84,12 @@ public class Mini1_player : MonoBehaviour
 
         transform.position = curPos + nextPos;
 
-        if (Input.GetButtonDown("Horizontal") ||
-            Input.GetButtonUp("Horizontal"))
-        {
-            anim.SetInteger("Input", (int)h);
-        }
     }
-    public void ButtonADown()
-    {
-        isButtonA = true;
-        Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.AttackA);
-    }
-
-    public void ButtonAUp()
-    {
-        isButtonA = false;
-    }
-
-    public void ButtonBDown()
-    {
-        isButtonB = true;
-    }
-
+  
 
     void Fire()
     {
-        /*if (!Input.GetButton("Fire1")) // 클릭 시 발사 제어
-        {
-            return;
-        }*/
 
-        if (!isButtonA)
-            return;
 
         //#.발사 재장전 쿨타임
         if (curShotDelay < maxShotDelay)
@@ -212,14 +152,6 @@ public class Mini1_player : MonoBehaviour
 
     void Boom()
     {
-        /*if (!Input.GetButton("Fire2"))
-        {
-            return;
-        }*/
-
-
-        if (!isButtonB)
-            return;
 
         if (isBoomTime)
         {
@@ -285,7 +217,7 @@ public class Mini1_player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Border")
+        if (collision.gameObject.tag == "Border") //#.벽 충돌 설정
         {
             switch (collision.gameObject.name)
             {
@@ -302,13 +234,15 @@ public class Mini1_player : MonoBehaviour
                     isTouchRight = true;
                     break;
             }
+            
         }
         else if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyBullet")
         {
+            /*
             //#.무적상태인 경우
             if (isRespawnTime)
                 return;
-
+            */
             //#.맞았을 경우
             if (isHit)
                 return;
@@ -332,50 +266,6 @@ public class Mini1_player : MonoBehaviour
             gameObject.SetActive(false);
             collision.gameObject.SetActive(false);
         }
-        /*
-        else if (collision.gameObject.tag == "Item")
-        {
-            Item item = collision.gameObject.GetComponent<Item>();
-            switch (item.type)
-            {
-                case "Coin":
-                    Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.EarnItem);
-                    score += 1000;
-                    break;
-                case "Power":
-                    Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.EarnItem);
-                    if (power == maxPower)
-                        score += 500;
-                    else
-                    {
-                        power++;
-                        AddFollower();
-                    }
-                    break;
-                case "Boom":
-                    Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.EarnItem);
-                    if (boom == maxBoom)
-                        score += 500;
-                    else
-                    {
-                        boom++;
-                        gameManager.UpdateBoomIcon(boom);
-                    }
-                    break;
-            }
-            collision.gameObject.SetActive(false);
-        }*/
-    }
-
-    //#.보조무기 장착
-    void AddFollower()
-    {
-        if (power == 2)
-            followers[0].SetActive(true);
-        if (power == 4)
-            followers[1].SetActive(true);
-        if (power == 6)
-            followers[2].SetActive(true);
     }
 
 
@@ -385,10 +275,13 @@ public class Mini1_player : MonoBehaviour
         isBoomTime = false;
     }
 
+
+    //#.벽 충돌 설정
     void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Border")
         {
+            
             switch (collision.gameObject.name)
             {
                 case "Top":
@@ -404,6 +297,7 @@ public class Mini1_player : MonoBehaviour
                     isTouchRight = false;
                     break;
             }
+            
         }
     }
 }
