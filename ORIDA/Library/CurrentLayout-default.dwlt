@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1692
     height: 961.3334
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Project
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_MinSize: {x: 681, y: 492}
   m_MaxSize: {x: 18004, y: 14042}
   vertical: 0
-  controlID: 37
+  controlID: 115
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 405, y: 492}
   m_MaxSize: {x: 14003, y: 14042}
   vertical: 1
-  controlID: 38
+  controlID: 116
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_MinSize: {x: 405, y: 221}
   m_MaxSize: {x: 12005, y: 4021}
   vertical: 0
-  controlID: 39
+  controlID: 69
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_MinSize: {x: 333, y: 271}
   m_MaxSize: {x: 14003, y: 10021}
   vertical: 0
-  controlID: 146
+  controlID: 117
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -475,9 +475,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 08420000
       m_LastClickedID: 0
-      m_ExpandedIDs: aaf2ffff60fbffff
+      m_ExpandedIDs: 60fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -539,7 +539,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: -0.27526325, y: 0.203502, z: -0.14116612}
     speed: 2
-    m_Value: {x: -0.17944176, y: 0.13266122, z: -0.09202499}
+    m_Value: {x: -0.27526325, y: 0.203502, z: -0.14116612}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -592,7 +592,7 @@ MonoBehaviour:
   m_Size:
     m_Target: 11.411661
     speed: 2
-    m_Value: 10.92025
+    m_Value: 11.411661
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -726,8 +726,8 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 7.3333335
-    y: 620.6667
+    x: -21333.334
+    y: -20762.668
     width: 779
     height: 349.66663
   m_ViewDataDictionary: {fileID: 0}
@@ -744,22 +744,22 @@ MonoBehaviour:
     m_SkipHidden: 1
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Sprites
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Sprites
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\User\UnityProject\Orida_Promotion_Project\PandoraCube_Orida\ORIDA
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: ae410000
-    m_LastClickedID: 16814
-    m_ExpandedIDs: 00000000ae41000000ca9a3b
+    m_SelectedIDs: fa410000
+    m_LastClickedID: 16890
+    m_ExpandedIDs: 00000000ee41000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -787,7 +787,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ae410000
+    m_ExpandedIDs: 00000000ee410000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
