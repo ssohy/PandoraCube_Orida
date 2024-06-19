@@ -29,9 +29,8 @@ public class Mini1_player : MonoBehaviour
     public bool isBoomTime;
 
 
-    public GameObject bulletObjA; // 총알 오브젝트A
-    public GameObject bulletObjB; // 총알 오브젝트B
-    public GameObject boomEffect;
+    public GameObject bulletObj; // 총알 오브젝트
+    //public GameObject boomEffect;
 
     //public bool isRespawnTime;
 
@@ -64,9 +63,9 @@ public class Mini1_player : MonoBehaviour
     void Update()
     {
         Move();
-        //Fire();
+        Fire();
         ///Boom();
-        //Reload();
+        Reload();
     }
 
     void Move() //이동
@@ -89,57 +88,19 @@ public class Mini1_player : MonoBehaviour
 
     void Fire()
     {
-
+        //#.마우스 클릭 시 발사
+        if (!Input.GetButton("Fire1"))
+            return;
 
         //#.발사 재장전 쿨타임
         if (curShotDelay < maxShotDelay)
-        {
             return;
-        }
 
-        switch (power)
-        {
-            case 1:
-                // Power One
-                GameObject bullet = objectManager.MakeObj("BulletPlayerA");
-                bullet.transform.position = transform.position;
+        GameObject bullet = objectManager.MakeObj("BulletPlayer");
+        bullet.transform.position = transform.position;
 
-                Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
-                rigid.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-                break;
-            case 2:
-                // Power two
-                GameObject bulletR = objectManager.MakeObj("BulletPlayerA");
-                bulletR.transform.position = transform.position + Vector3.right * 0.1f;
-
-                GameObject bulletL = objectManager.MakeObj("BulletPlayerA");
-                bulletL.transform.position = transform.position + Vector3.left * 0.1f;
-
-                Rigidbody2D rigidR = bulletR.GetComponent<Rigidbody2D>();
-                Rigidbody2D rigidL = bulletL.GetComponent<Rigidbody2D>();
-                rigidR.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-                rigidL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-                break;
-            default:
-                // power three,four,five,six - maxPower 6으로 변경함
-                GameObject bulletRR = objectManager.MakeObj("BulletPlayerA");
-                bulletRR.transform.position = transform.position + Vector3.right * 0.2f;
-
-                GameObject bulletCC = objectManager.MakeObj("BulletPlayerB");
-                bulletCC.transform.position = transform.position;
-
-                GameObject bulletLL = objectManager.MakeObj("BulletPlayerA");
-                bulletLL.transform.position = transform.position + Vector3.left * 0.2f;
-
-                Rigidbody2D rigidRR = bulletRR.GetComponent<Rigidbody2D>();
-                Rigidbody2D rigidCC = bulletCC.GetComponent<Rigidbody2D>();
-                Rigidbody2D rigidLL = bulletLL.GetComponent<Rigidbody2D>();
-
-                rigidRR.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-                rigidCC.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-                rigidLL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-                break;
-        }
+        Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
+        rigid.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
         //#.딜레이 초기화
         curShotDelay = 0;
     }
@@ -165,7 +126,7 @@ public class Mini1_player : MonoBehaviour
         isBoomTime = true;
         Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.AttackB);
         gameManager.UpdateBoomIcon(boom);
-        boomEffect.SetActive(true);
+        //boomEffect.SetActive(true);
         Invoke("OffBoomEffect", 4f);
         GameObject[] enemiesL = objectManager.GetPool("EnemyL");
         GameObject[] enemiesM = objectManager.GetPool("EnemyM");
@@ -271,7 +232,7 @@ public class Mini1_player : MonoBehaviour
 
     void OffBoomEffect()
     {
-        boomEffect.SetActive(false);
+        //boomEffect.SetActive(false);
         isBoomTime = false;
     }
 
