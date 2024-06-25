@@ -6,18 +6,16 @@ public class Mini1_enemy : MonoBehaviour
 {
     public int enemyScore;
     public string enemyName;
+
     public float speed;
     public int health;
     public Sprite[] sprites;
-
     SpriteRenderer spriteRenderer;
     Animator anim;
 
     public int patternIndex;
     public int curPatternCount;
     public int[] maxPatternCount;
-
-
 
     public float maxShotDelay;
     public float curShotDelay;
@@ -28,20 +26,15 @@ public class Mini1_enemy : MonoBehaviour
     public Mini1_objectManager objectManager;
     public Mini1_gameManager gameManager;
 
-    public GameObject itemCoin;
-    public GameObject itemPower;
-    public GameObject itemBoom;
 
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        if (enemyName == "B")
-            anim = GetComponent<Animator>();
     }
 
     void OnEnable()
     {
+        /*
         switch (enemyName)
         {
             case "B":
@@ -57,7 +50,7 @@ public class Mini1_enemy : MonoBehaviour
             case "S":
                 health = 3;
                 break;
-        }
+        }*/
     }
 
     void Stop()
@@ -210,8 +203,8 @@ public class Mini1_enemy : MonoBehaviour
 
     void Update()
     {
-        if (enemyName == "B")
-            return;
+        //if (enemyName == "B")
+        //    return;
 
         Fire();
         Reload();
@@ -239,35 +232,14 @@ public class Mini1_enemy : MonoBehaviour
             Mini1_player playerLogic = player.GetComponent<Mini1_player>();
             playerLogic.score += enemyScore;
 
-            int ran = enemyName == "B" ? 0 : Random.Range(0, 10);
+            //int ran = enemyName == "B" ? 0 : Random.Range(0, 10);
 
-            if (ran < 3)
-            {
-                Debug.Log("Nope");
-            }
-            else if (ran < 6)
-            {
-                GameObject itemCoin = objectManager.MakeObj("ItemCoin");
-                itemCoin.transform.position = transform.position;
-            }
-            else if (ran < 8)
-            {
-                GameObject itemPower = objectManager.MakeObj("ItemPower");
-                itemPower.transform.position = transform.position;
-            }
-            else if (ran < 10)
-            {
-                GameObject itemBoom = objectManager.MakeObj("ItemBoom");
-                itemBoom.transform.position = transform.position;
-            }
+            
 
             gameObject.SetActive(false);
             transform.rotation = Quaternion.identity;
             gameManager.CallExplosion(transform.position, enemyName);
 
-            //#.Boss Kill
-            if (enemyName == "B")
-                gameManager.StageEnd();
         }
     }
 
@@ -278,7 +250,7 @@ public class Mini1_enemy : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "BorderBullet" && enemyName != "B")
+        if (collision.gameObject.tag == "BorderBullet")
         {
             gameObject.SetActive(false);
             transform.rotation = Quaternion.identity;
@@ -287,6 +259,7 @@ public class Mini1_enemy : MonoBehaviour
         {
             Mini1_bullet bullet = collision.gameObject.GetComponent<Mini1_bullet>();
             OnHit(bullet.dmg);
+
 
             collision.gameObject.SetActive(false);
         }
@@ -298,31 +271,16 @@ public class Mini1_enemy : MonoBehaviour
         {
             return;
         }
-        if (enemyName == "S")
+        if (enemyName == "enemy")
         {
-            GameObject bullet = objectManager.MakeObj("BulletEnemyA");
+            GameObject bullet = objectManager.MakeObj("BulletEnemy");
             bullet.transform.position = transform.position;
 
             Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
             Vector3 dirVec = player.transform.position - transform.position;
             rigid.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);
         }
-        else if (enemyName == "L")
-        {
-            GameObject bulletR = objectManager.MakeObj("BulletEnemyB");
-            bulletR.transform.position = transform.position + Vector3.right * 0.3f;
-            GameObject bulletL = objectManager.MakeObj("BulletEnemyB");
-            bulletL.transform.position = transform.position + Vector3.left * 0.3f;
-
-            Rigidbody2D rigidR = bulletR.GetComponent<Rigidbody2D>();
-            Rigidbody2D rigidL = bulletL.GetComponent<Rigidbody2D>();
-
-            Vector3 dirVecR = player.transform.position - (transform.position + Vector3.right * 0.3f);
-            Vector3 dirVecL = player.transform.position - (transform.position + Vector3.left * 0.3f);
-
-            rigidR.AddForce(dirVecR.normalized * 10, ForceMode2D.Impulse);
-            rigidL.AddForce(dirVecL.normalized * 10, ForceMode2D.Impulse);
-        }
+        
         curShotDelay = 0;
     }
 
