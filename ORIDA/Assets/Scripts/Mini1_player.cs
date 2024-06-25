@@ -211,7 +211,7 @@ public class Mini1_player : MonoBehaviour
             isHit = true;
 
             life--;
-            Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.Dead);
+            //Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.Dead);
             gameManager.UpdateLifeIcon(life);
             gameManager.CallExplosion(transform.position, "P");
 

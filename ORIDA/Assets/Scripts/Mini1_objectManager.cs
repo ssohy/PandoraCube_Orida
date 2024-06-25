@@ -11,9 +11,11 @@ public class Mini1_objectManager : MonoBehaviour
     public GameObject enemyMPrefab;
     public GameObject enemySPrefab;
     */
+    public GameObject enemyPrefab;
     public GameObject bulletPlayerPrefab;
+    
+    public GameObject bulletEnemyPrefab;
     /*
-    public GameObject bulletEnemyAPrefab;
     public GameObject bulletEnemyBPrefab;
     public GameObject bulletFollowerPrefab;
     public GameObject bulletBossAPrefab;
@@ -25,6 +27,7 @@ public class Mini1_objectManager : MonoBehaviour
     GameObject[] enemyM;
     GameObject[] enemyS;
     */
+    GameObject[] enemy;
     GameObject[] bulletPlayer;
 
     /*
@@ -36,24 +39,16 @@ public class Mini1_objectManager : MonoBehaviour
     GameObject[] explosion;
 
     */
+    GameObject[] bulletEnemy;
     GameObject[] targetPool;
 
     void Awake()
     {
-        /*
-        enemyB = new GameObject[1];
-        enemyL = new GameObject[10];
-        enemyM = new GameObject[10];
-        enemyS = new GameObject[20];
-        */
+        enemy = new GameObject[10];
+        bulletPlayer = new GameObject[100];
+        bulletEnemy = new GameObject[100];
 
-    bulletPlayer = new GameObject[100];
         /*
-        bulletEnemyA = new GameObject[100];
-        bulletEnemyB = new GameObject[100];
-        bulletFollower = new GameObject[100];
-        bulletBossA = new GameObject[50];
-        bulletBossB = new GameObject[1000];
         explosion = new GameObject[20];
         */
 
@@ -62,14 +57,14 @@ public class Mini1_objectManager : MonoBehaviour
 
     void Generate()
     {
-        /*
+        
         //#1.Enemy
-        for (int index = 0; index < enemyB.Length; index++)
+        for (int index = 0; index < enemy.Length; index++)
         {
-            enemyB[index] = Instantiate(enemyBPrefab);
-            enemyB[index].SetActive(false);
+            enemy[index] = Instantiate(enemyPrefab);
+            enemy[index].SetActive(false);
         }
-
+        /*
         for (int index = 0; index < enemyL.Length; index++)
         {
             enemyL[index] = Instantiate(enemyLPrefab);
@@ -96,13 +91,13 @@ public class Mini1_objectManager : MonoBehaviour
             bulletPlayer[index].SetActive(false);
         }
 
-        /*
-        for (int index = 0; index < bulletEnemyA.Length; index++)
+        
+        for (int index = 0; index < bulletEnemy.Length; index++)
         {
-            bulletEnemyA[index] = Instantiate(bulletEnemyAPrefab);
-            bulletEnemyA[index].SetActive(false);
+            bulletEnemy[index] = Instantiate(bulletEnemyPrefab);
+            bulletEnemy[index].SetActive(false);
         }
-
+        /*
         for (int index = 0; index < bulletEnemyB.Length; index++)
         {
             bulletEnemyB[index] = Instantiate(bulletEnemyBPrefab);
@@ -138,39 +133,17 @@ public class Mini1_objectManager : MonoBehaviour
     {
         switch (type)
         {
-            /*
-            case "EnemyB":
-                targetPool = enemyB;
+            
+            case "Enemy":
+                targetPool = enemy;
                 break;
-            case "EnemyL":
-                targetPool = enemyL;
-                break;
-            case "EnemyM":
-                targetPool = enemyM;
-                break;
-            case "EnemyS":
-                targetPool = enemyS;
-                break;
-            */
             case "BulletPlayer":
                 targetPool = bulletPlayer;
+                break;   
+            case "BulletEnemy":
+                targetPool = bulletEnemy;
                 break;
                 /*
-            case "BulletEnemyA":
-                targetPool = bulletEnemyA;
-                break;
-            case "BulletEnemyB":
-                targetPool = bulletEnemyB;
-                break;
-            case "BulletFollower":
-                targetPool = bulletFollower;
-                break;
-            case "BulletBossA":
-                targetPool = bulletBossA;
-                break;
-            case "BulletBossB":
-                targetPool = bulletBossB;
-                break;
             case "Explosion":
                 targetPool = explosion;
                 break;
@@ -181,7 +154,9 @@ public class Mini1_objectManager : MonoBehaviour
         {
             if (!targetPool[index].activeSelf)
             {
+                Debug.Log(type);
                 targetPool[index].SetActive(true);
+
                 return targetPool[index];
             }
         }
@@ -193,27 +168,29 @@ public class Mini1_objectManager : MonoBehaviour
     {
         switch (type)
         {
+            
+            case "Enemy":
+                targetPool = enemy;
+                break;
             /*
-            case "EnemyB":
-                targetPool = enemyB;
-                break;
-            case "EnemyL":
-                targetPool = enemyL;
-                break;
-            case "EnemyM":
-                targetPool = enemyM;
-                break;
-            case "EnemyS":
-                targetPool = enemyS;
-                break;
-            */
+        case "EnemyL":
+            targetPool = enemyL;
+            break;
+        case "EnemyM":
+            targetPool = enemyM;
+            break;
+        case "EnemyS":
+            targetPool = enemyS;
+            break;
+        */
             case "BulletPlayer":
                 targetPool = bulletPlayer;
                 break;
-            /*
-            case "BulletEnemyA":
-                targetPool = bulletEnemyA;
+            
+            case "BulletEnemy":
+                targetPool = bulletEnemy;
                 break;
+                /*
             case "BulletEnemyB":
                 targetPool = bulletEnemyB;
                 break;
