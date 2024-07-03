@@ -1,8 +1,8 @@
 1, enemy, 0
-1, enemy, 1
-1, enemy, 2
-1, enemy, 3
-1, enemy, 4
-1, enemy, 5
-1, enemy, 6
-1, enemy, 7
+3, enemy, 3
+3, enemy, 7
+3, enemy, 4
+2, enemy, 1
+4, enemy, 5
+2, enemy, 2
+2, enemy, 6
