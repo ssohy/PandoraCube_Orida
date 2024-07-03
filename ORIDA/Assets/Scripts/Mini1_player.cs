@@ -32,7 +32,7 @@ public class Mini1_player : MonoBehaviour
     public GameObject bulletObj; // 총알 오브젝트
     //public GameObject boomEffect;
 
-    //public bool isRespawnTime;
+    public bool isRespawnTime;
 
     SpriteRenderer spriteRenderer;
     void Awake()
@@ -43,11 +43,11 @@ public class Mini1_player : MonoBehaviour
 
     void OnEnable() // 죽었을 때 무적상태
     {
-        //Unbeatable();
-        //Invoke("Unbeatable", 3);
+        Unbeatable();
+        Invoke("Unbeatable", 3);
     }
 
-    /*
+    
     void Unbeatable()
     {
         isRespawnTime = !isRespawnTime;
@@ -59,7 +59,7 @@ public class Mini1_player : MonoBehaviour
         {
             spriteRenderer.color = new Color(1, 1, 1, 1);
         }
-    }*/
+    }
     void Update()
     {
         Move();
@@ -197,13 +197,13 @@ public class Mini1_player : MonoBehaviour
             }
             
         }
-        else if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyBullet")
+        else if (collision.gameObject.tag == "enemy" || collision.gameObject.tag == "EnemyBullet")
         {
-            /*
+            
             //#.무적상태인 경우
             if (isRespawnTime)
                 return;
-            */
+            
             //#.맞았을 경우
             if (isHit)
                 return;
@@ -213,7 +213,7 @@ public class Mini1_player : MonoBehaviour
             life--;
             //Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.Dead);
             gameManager.UpdateLifeIcon(life);
-            gameManager.CallExplosion(transform.position, "P");
+            //gameManager.CallExplosion(transform.position, "P");
 
             if (life == 0)
             {

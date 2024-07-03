@@ -200,7 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScore: 8
   enemyName: enemy
-  speed: 2
+  speed: 4
   health: 20
   sprites:
   - {fileID: 21300000, guid: 60423fbea40f52d4eb7894be41d93605, type: 3}
@@ -208,7 +208,7 @@ MonoBehaviour:
   patternIndex: 0
   curPatternCount: 0
   maxPatternCount: 
-  maxShotDelay: 1
+  maxShotDelay: 2
   curShotDelay: 0
   bulletObjA: {fileID: 0}
   bulletObjB: {fileID: 0}

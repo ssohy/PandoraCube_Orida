@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.IO;
+using TMPro;
 
 public class Mini1_gameManager : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Mini1_gameManager : MonoBehaviour
     public float curSpawnDelay;
 
     public GameObject player;
-    public Text scoreText;
+    public TMP_Text scoreText;
     public Image[] lifeImage;
     public Image[] boomImage;
     public GameObject gameOverSet;
@@ -37,10 +38,10 @@ public class Mini1_gameManager : MonoBehaviour
     public void StageStart()
     {
         //#.Enemy Spawn File Read
-        ReadSpawnFile();
+        //ReadSpawnFile();
     }
 
-
+    /*
     void ReadSpawnFile()
     {
         //#1.변수 초기화
@@ -71,7 +72,7 @@ public class Mini1_gameManager : MonoBehaviour
         stringReader.Close();
 
         nextSpawnDelay = spawnList[0].delay;
-    }
+    }*/
 
     void Update()
     {
@@ -84,15 +85,15 @@ public class Mini1_gameManager : MonoBehaviour
         }
 
         // #.UI Score Update
-        //Mini1_player playerLogic = player.GetComponent<Mini1_player>();
-        //scoreText.text = string.Format("{0:n0}", playerLogic.score);
+        Mini1_player playerLogic = player.GetComponent<Mini1_player>();
+        scoreText.text = string.Format("{0:n0}", playerLogic.score);
     }
 
     void SpawnEnemy()
     {
         int enemyIndex = 0;
 
-        int enemyPoint = spawnList[spawnIndex].point;
+        int enemyPoint = Random.Range(0,7);
         GameObject enemy = objectManager.MakeObj(enemyObjs[enemyIndex]);
         enemy.transform.position = spawnPoints[enemyPoint].position;
 
@@ -106,15 +107,15 @@ public class Mini1_gameManager : MonoBehaviour
         rigid.velocity = new Vector2(0, enemyLogic.speed * (-1));
         
 
-        spawnIndex++;
-
+        //spawnIndex++;
+        /*
         if (spawnIndex == spawnList.Count)
         {
             spawnEnd = true;
             return;
-        }
+        }*/
 
-        nextSpawnDelay = spawnList[spawnIndex].delay;
+        nextSpawnDelay = Random.Range(0.5f, 3f);
     }
 
     public void UpdateLifeIcon(int life)
@@ -143,7 +144,6 @@ public class Mini1_gameManager : MonoBehaviour
 
     public void RespawnPlayer()
     {
-
         Invoke("RespawnPlayerExe", 2f);
         player.transform.position = Vector3.down * 4f;
         player.SetActive(true);
@@ -159,17 +159,17 @@ public class Mini1_gameManager : MonoBehaviour
 
     public void CallExplosion(Vector3 pos, string type)
     {
-        GameObject explosion = objectManager.MakeObj("Explosion");
-        Mini1_explosion explosionLogic = explosion.GetComponent<Mini1_explosion>();
+        //GameObject explosion = objectManager.MakeObj("Explosion");
+        //Mini1_explosion explosionLogic = explosion.GetComponent<Mini1_explosion>();
 
-        explosion.transform.position = pos;
-        explosionLogic.StartExplosion(type);
+        //explosion.transform.position = pos;
+        //explosionLogic.StartExplosion(type);
     }
 
     public void GameOver()
     {
         gameOverSet.SetActive(true);
-        Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.Gameover);
+        //Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.Gameover);
         //  AudioManager.instance.PlayBgm(false);
 
         //GetComponent<AudioSource>().Stop();
