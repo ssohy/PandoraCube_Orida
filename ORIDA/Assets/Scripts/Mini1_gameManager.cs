@@ -115,7 +115,7 @@ public class Mini1_gameManager : MonoBehaviour
             return;
         }*/
 
-        nextSpawnDelay = Random.Range(0.5f, 3f);
+        nextSpawnDelay = Random.Range(1.0f, 3f);
     }
 
     public void UpdateLifeIcon(int life)
@@ -181,4 +181,8 @@ public class Mini1_gameManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    public void homeButton()
+    {
+        SceneManager.LoadScene("Main");
+    }
 }
