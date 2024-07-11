@@ -28,51 +28,24 @@ public class Mini1_gameManager : MonoBehaviour
     public int spawnIndex;
     public bool spawnEnd;
 
+    public GameObject pauseUI;
+
+
+
+
     void Awake()
     {
+        Time.timeScale = 0f;
         spawnList = new List<Mini1_spawn>();
         enemyObjs = new string[] {"Enemy"};
-        StageStart();
     }
 
-    public void StageStart()
+    public void Restart() // 일시정지 -> 게임으로 돌아가기
     {
-        //#.Enemy Spawn File Read
-        //ReadSpawnFile();
+        Time.timeScale = 1f;
+        pauseUI.SetActive(false);
     }
 
-    /*
-    void ReadSpawnFile()
-    {
-        //#1.변수 초기화
-        spawnList.Clear();
-        spawnIndex = 0;
-        spawnEnd = false;
-
-        //#2. 리스폰 파일 읽기
-        TextAsset textFile = Resources.Load("Stage " + stage) as TextAsset;
-        StringReader stringReader = new StringReader(textFile.text);
-
-        //#3. 한 줄씩 데이터 저장
-        while (stringReader != null)
-        {
-            string line = stringReader.ReadLine();
-            Debug.Log(line);
-
-            if (line == null)
-                break;
-
-            Mini1_spawn spawnData = new Mini1_spawn();
-            spawnData.delay = float.Parse(line.Split(',')[0]);
-            spawnData.type = line.Split(',')[1];
-            spawnData.point = int.Parse(line.Split(',')[2]);
-            spawnList.Add(spawnData);
-        }
-
-        stringReader.Close();
-
-        nextSpawnDelay = spawnList[0].delay;
-    }*/
 
     void Update()
     {
