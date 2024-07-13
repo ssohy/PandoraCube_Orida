@@ -4,96 +4,58 @@ using UnityEngine;
 
 public class Mini2_player : MonoBehaviour
 {
-    public Sprite[] sprites;
-    SpriteRenderer spriteRenderer;
-    int curSprite = 0;
-
-    public float stepHeight = 1.0f; // 한 계단의 높이
-    public float moveSpeed = 2.0f; // 이동 속도
-
-    private bool isMoving = false;
-    private Vector3 targetPosition;
-
-    private Mini2_GameManager mapGenerator;
+    public Animator anim;
+    public AudioSource[] sound;
     public Mini2_GameManager gameManager;
+    public bool isleft = true, isDie = false;
+    public int characterIndex, stairIndex;
 
     void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        anim = gameObject.GetComponent<Animator>();
     }
 
-    void Start()
-    {
-        mapGenerator = FindObjectOfType<Mini2_GameManager>();
-    }
 
     void Update()
     {
-        if (!isMoving)
-        {
-            UP();
-            Turn();
-        }
-        else
-        {
-            MoveToTarget();
-        }
-    }
-
-    void UP() // 올라가기
-    {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Debug.Log("W누름");
-            targetPosition = transform.position + new Vector3(0, stepHeight, 0);
-
-            // 아래에 계단이 있는지 확인
-            Vector3 belowPosition = transform.position - new Vector3(0, stepHeight / 2, 0);
-            Collider2D hit = Physics2D.OverlapCircle(belowPosition, 0.1f, LayerMask.GetMask("Stair"));
-            if (hit == null)
-            {
-                gameManager.GameOver();
-                return;
-            }
-
-            isMoving = true;
-
-            // 새로운 계단 생성 요청
-            mapGenerator.GenerateNewStair();
+            Climb(false);
         }
-    }
 
-    void Turn() // 방향전환
-    {
+        // 스페이스바를 눌러 방향전환
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (curSprite == 1)
-            {
-                spriteRenderer.sprite = sprites[0];
-                curSprite = 0;
-            }
-            else
-            {
-                spriteRenderer.sprite = sprites[1];
-                curSprite = 1;
-            }
+            Climb(true);
         }
+    }
+    public void Climb(bool isChange)
+    {
+        if (isChange) isleft = !isleft;
+        gameManager.StairMove(stairIndex, isChange, isleft);
+        if ((++stairIndex).Equals(20)) stairIndex = 0;
+        MoveAnimation();
+        gameManager.gaugeStart = true;
     }
 
-    void MoveToTarget()
+
+    public void MoveAnimation()
     {
-        mapGenerator.MoveBackground(-moveSpeed * Time.deltaTime);
-        if (transform.position.y <= targetPosition.y)
-        {
-            isMoving = false;
-        }
+        //Change left and right when changing direction
+        if (!isleft)
+            transform.rotation = Quaternion.Euler(0, -180, 0);
+        else
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        if (isDie) return;
+        anim.SetBool("Move", true);
+        Invoke("IdleAnimation", 0.05f);
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    public void IdleAnimation()
     {
-        if (collision.gameObject.tag == "Bottom")
-        {
-            gameManager.GameOver();
-        }
+        anim.SetBool("Move", false);
     }
+
+
 }
