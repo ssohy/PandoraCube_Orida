@@ -13,6 +13,8 @@ public class Mini1_player : MonoBehaviour
 
     public int life; // 목숨
     public int score; // 점수
+    public int genCoins; // 코인 수
+    public int saveCoins; 
 
     public float speed;
     public int power;
@@ -66,6 +68,7 @@ public class Mini1_player : MonoBehaviour
         Fire();
         ///Boom();
         Reload();
+
     }
 
     void Move() //이동
@@ -260,5 +263,15 @@ public class Mini1_player : MonoBehaviour
             }
             
         }
+    }
+
+    public void CheckScore()
+    {
+        genCoins = score / 50;
+        Debug.Log("생성된 코인 수 : " + genCoins);
+        // PlayerPrefs에 코인 수 저장
+        saveCoins = PlayerPrefs.GetInt("Coins", 0) + genCoins;
+        PlayerPrefs.SetInt("Coins", saveCoins);
+        PlayerPrefs.Save();
     }
 }

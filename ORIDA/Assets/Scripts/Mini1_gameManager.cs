@@ -18,6 +18,7 @@ public class Mini1_gameManager : MonoBehaviour
     public float curSpawnDelay;
 
     public GameObject player;
+    public Mini1_player forCoinsPlayer;
     public TMP_Text scoreText;
     public Image[] lifeImage;
     public Image[] boomImage;
@@ -29,6 +30,7 @@ public class Mini1_gameManager : MonoBehaviour
     public bool spawnEnd;
 
     public GameObject pauseUI;
+
 
 
 
@@ -141,6 +143,7 @@ public class Mini1_gameManager : MonoBehaviour
 
     public void GameOver()
     {
+        forCoinsPlayer.CheckScore();
         gameOverSet.SetActive(true);
         //Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.Gameover);
         //  AudioManager.instance.PlayBgm(false);
@@ -158,4 +161,7 @@ public class Mini1_gameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Main");
     }
+
+
+
 }

@@ -9,6 +9,7 @@ TagManager:
   - enemy
   - PlayerBullet
   - EnemyBullet
+  - Bottom
   layers:
   - Default
   - TransparentFX
@@ -16,8 +17,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Stair
+  - Player
   - 
   - 
   - 

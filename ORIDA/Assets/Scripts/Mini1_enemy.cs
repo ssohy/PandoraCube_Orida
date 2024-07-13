@@ -9,6 +9,7 @@ public class Mini1_enemy : MonoBehaviour
 
     public float speed;
     public int health;
+    public int maxHealth; // 추가: 적의 최대 체력
     public Sprite[] sprites;
     SpriteRenderer spriteRenderer;
     Animator anim;
@@ -26,16 +27,20 @@ public class Mini1_enemy : MonoBehaviour
     public Mini1_objectManager objectManager;
     public Mini1_gameManager gameManager;
 
-
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        maxHealth = health; // 초기화 시 최대 체력 저장
     }
 
+    void OnEnable()
+    {
+        health = maxHealth; // 적이 활성화될 때 체력을 최대 체력으로 초기화
+        spriteRenderer.sprite = sprites[0]; // 적의 스프라이트를 초기 상태로 설정
+    }
 
     void Update()
     {
-
         Fire();
         Reload();
     }
@@ -51,20 +56,12 @@ public class Mini1_enemy : MonoBehaviour
         spriteRenderer.sprite = sprites[1];
         Invoke("ReturnSprite", 0.1f);
 
-
         if (health <= 0)
         {
             Mini1_player playerLogic = player.GetComponent<Mini1_player>();
             playerLogic.score += enemyScore;
-
-            //int ran = enemyName == "B" ? 0 : Random.Range(0, 10);
-
-            
-
             gameObject.SetActive(false);
             transform.rotation = Quaternion.identity;
-            gameManager.CallExplosion(transform.position, enemyName);
-
         }
     }
 
@@ -82,19 +79,15 @@ public class Mini1_enemy : MonoBehaviour
         }
         else if (collision.gameObject.tag == "PlayerBullet")
         {
-            //Mini1_bullet bullet = collision.gameObject.GetComponent<Mini1_bullet>();
             OnHit(5);
-
-            collision.gameObject.SetActive(false);
         }
     }
 
     void Fire()
     {
         if (curShotDelay < maxShotDelay)
-        {
             return;
-        }
+
         if (enemyName == "enemy")
         {
             GameObject bullet = objectManager.MakeObj("BulletEnemy");
@@ -104,7 +97,7 @@ public class Mini1_enemy : MonoBehaviour
             Vector3 dirVec = player.transform.position - transform.position;
             rigid.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);
         }
-        
+
         curShotDelay = 0;
     }
 
