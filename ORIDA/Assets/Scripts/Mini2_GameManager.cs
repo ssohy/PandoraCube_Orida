@@ -2,74 +2,203 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Mini2_GameManager : MonoBehaviour
 {
-    public GameObject stairPrefab; // 계단 프리팹
-    public int initialStairs = 10; // 초기 생성 계단 수
-    public float stepHeight = 1.0f; // 한 계단의 높이
-    public float stepWidth = 2.5f; // 한 계단의 너비
-    public float leftBoundary = -7.0f; // 왼쪽 경계
-    public float rightBoundary = 7.0f; // 오른쪽 경계
+    public Mini2_player player;
+    //public DontDestory dontDestory;
+    public GameObject[] players, stairs, UI;
+    public GameObject pauseBtn, backGround;
 
-    private List<GameObject> stairs = new List<GameObject>();
-    private Transform backgroundTransform;
+    public AudioSource[] sound;
+    public Animator[] anim;
+    public Text finalScoreText, bestScoreText, scoreText;
+    public Image gauge;
+    public Button[] settingButtons;
 
-    public GameObject gameOverSet;
+    int score, sceneCount;
+    public bool gaugeStart = false, vibrationOn = true, isGamePaused = false;
+    float gaugeRedcutionRate = 0.0025f;
+    public bool[] IsChangeDir = new bool[20];
+
+    Vector3 beforePos,
+    startPos = new Vector3(-0.8f, -1.5f, 0),
+    leftPos = new Vector3(-0.8f, 0.4f, 0),
+    rightPos = new Vector3(0.8f, 0.4f, 0),
+    leftDir = new Vector3(0.8f, -0.4f, 0),
+    rightDir = new Vector3(-0.8f, -0.4f, 0);
+
+    enum State { start, leftDir, rightDir }
+    State state = State.start;
+
 
     void Awake()
     {
-        backgroundTransform = new GameObject("Background").transform;
-        GenerateInitialStairs();
+        players[0].SetActive(true);
+        player = players[0].GetComponent<Mini2_player>();
+
+        StairsInit();
+        GaugeReduce();
+        StartCoroutine("CheckGauge");
     }
 
-    void GenerateInitialStairs()
-    {
-        // 첫 번째 계단을 특정 위치에 생성
-        Vector3 firstStairPosition = new Vector3(1, -3, 0);
-        GameObject firstStair = Instantiate(stairPrefab, firstStairPosition, Quaternion.identity, backgroundTransform);
-        firstStair.layer = LayerMask.NameToLayer("Stair");
-        stairs.Add(firstStair);
 
-        for (int i = 1; i < initialStairs; i++)
+    //Initially Spawn The Stairs
+    void StairsInit()
+    {
+        for (int i = 0; i < 20; i++)
         {
-            GenerateNewStair();
+            switch (state)
+            {
+                case State.start:
+                    stairs[i].transform.position = startPos;
+                    state = State.leftDir;
+                    break;
+                case State.leftDir:
+                    stairs[i].transform.position = beforePos + leftPos;
+                    break;
+                case State.rightDir:
+                    stairs[i].transform.position = beforePos + rightPos;
+                    break;
+            }
+            beforePos = stairs[i].transform.position;
+
+          
         }
     }
 
-    public void GenerateNewStair()
+
+
+
+    //Spawn The Stairs At The Random Location
+    void SpawnStair(int num)
     {
-        Vector3 newPosition = Vector3.zero;
-        if (stairs.Count > 0)
+        IsChangeDir[num + 1 == 20 ? 0 : num + 1] = false;
+        beforePos = stairs[num == 0 ? 19 : num - 1].transform.position;
+        switch (state)
         {
-            Vector3 lastStairPosition = stairs[stairs.Count - 1].transform.position;
-
-            // 랜덤으로 좌우 이동
-            float randomX = Random.Range(-stepWidth, stepWidth);
-            newPosition = new Vector3(
-                Mathf.Clamp(lastStairPosition.x + randomX, leftBoundary, rightBoundary),
-                lastStairPosition.y + stepHeight,
-                lastStairPosition.z
-            );
+            case State.leftDir:
+                stairs[num].transform.position = beforePos + leftPos;
+                break;
+            case State.rightDir:
+                stairs[num].transform.position = beforePos + rightPos;
+                break;
         }
-        GameObject newStair = Instantiate(stairPrefab, newPosition, Quaternion.identity, backgroundTransform);
-        newStair.layer = LayerMask.NameToLayer("Stair"); // 계단에 Stair 레이어 설정
-        stairs.Add(newStair);
     }
 
-    public void MoveBackground(float moveDistance)
+
+
+    //Stairs Moving Along The Direction       
+    public void StairMove(int stairIndex, bool isChange, bool isleft)
     {
-        backgroundTransform.position += new Vector3(0, moveDistance, 0);
+        if (player.isDie) return;
+
+        //Move stairs to the right or left
+        for (int i = 0; i < 20; i++)
+        {
+            if (isleft) stairs[i].transform.position += leftDir;
+            else stairs[i].transform.position += rightDir;
+        }
+
+        //Move the stairs below a certain height
+        for (int i = 0; i < 20; i++)
+            if (stairs[i].transform.position.y < -5) SpawnStair(i);
+
+        //Game over if climbing stairs is wrong
+        if (IsChangeDir[stairIndex] != isChange)
+        {
+            GameOver();
+            return;
+        }
+
+        //Score Update & Gauge Increase
+        scoreText.text = (++score).ToString();
+        gauge.fillAmount += 0.7f;
+        backGround.transform.position += backGround.transform.position.y < -14f ?
+            new Vector3(0, 4.7f, 0) : new Vector3(0, -0.05f, 0);
     }
 
-    public void GameOver()
+
+    //#.Gauge
+    void GaugeReduce()
     {
-        gameOverSet.SetActive(true);
-        //Mini1_audioManager.instance.PlaySfx(Mini1_audioManager.Sfx.Gameover);
-        //  AudioManager.instance.PlayBgm(false);
-
-        //GetComponent<AudioSource>().Stop();
+        if (gaugeStart)
+        {
+            //Gauge Reduction Rate Increases As Score Increases
+            if (score > 30) gaugeRedcutionRate = 0.0033f;
+            if (score > 60) gaugeRedcutionRate = 0.0037f;
+            if (score > 100) gaugeRedcutionRate = 0.0043f;
+            if (score > 150) gaugeRedcutionRate = 0.005f;
+            if (score > 200) gaugeRedcutionRate = 0.005f;
+            if (score > 300) gaugeRedcutionRate = 0.0065f;
+            if (score > 400) gaugeRedcutionRate = 0.0075f;
+            gauge.fillAmount -= gaugeRedcutionRate;
+        }
+        Invoke("GaugeReduce", 0.01f);
     }
+
+
+    IEnumerator CheckGauge()
+    {
+        while (gauge.fillAmount != 0)
+        {
+            yield return new WaitForSeconds(0.4f);
+        }
+        GameOver();
+    }
+
+
+    void GameOver()
+    {
+        //Animation
+        anim[0].SetBool("GameOver", true);
+        player.anim.SetBool("Die", true);
+
+        //UI
+        ShowScore();
+        pauseBtn.SetActive(false);
+
+        player.isDie = true;
+        player.MoveAnimation();
+
+        CancelInvoke();  //GaugeBar Stopped      
+        Invoke("DisableUI", 1.5f);
+    }
+
+
+    //Show score after game over
+    void ShowScore()
+    {
+        finalScoreText.text = score.ToString();
+    }
+
+
+
+    public void BtnDown(GameObject btn)
+    {
+        btn.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+        if (btn.name == "ClimbBtn") player.Climb(false);
+        else if (btn.name == "ChangeDirBtn") player.Climb(true);
+    }
+
+
+    public void BtnUp(GameObject btn)
+    {
+        btn.transform.localScale = new Vector3(1f, 1f, 1f);
+        if (btn.name == "PauseBtn")
+        {
+            CancelInvoke();  //Gauge Stopped
+            isGamePaused = true;
+        }
+        if (btn.name == "ResumeBtn")
+        {
+            GaugeReduce();
+            isGamePaused = false;
+        }
+    }
+
+
 
     public void homeButton()
     {
