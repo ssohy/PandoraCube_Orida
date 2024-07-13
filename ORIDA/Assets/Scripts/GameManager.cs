@@ -2,37 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
 
     public GameObject gameUI;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int coins;
+    public TMP_Text coinsText;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    public void mini1gameStart()
+    void Awake()
+    {
+        coins = PlayerPrefs.GetInt("Coins", 0);
+        coinsText.text = string.Format("{0:n0}", coins);
+    }
+    public void Mini1gameStart()
     {
         SceneManager.LoadScene("MiniGame1");
     }
 
-    public void mini2gameStart()
+    public void Mini2gameStart()
     {
         SceneManager.LoadScene("MiniGame1");
     }
-    public void gameUIstart()
+
+    public void ClosetLoad()
+    {
+        SceneManager.LoadScene("Closet");
+    }
+    public void GameUIstart()
     {
         gameUI.SetActive(true);
     }
-    public void gameUIcancle()
+    public void GameUIcancle()
     {
         gameUI.SetActive(false);
     }
