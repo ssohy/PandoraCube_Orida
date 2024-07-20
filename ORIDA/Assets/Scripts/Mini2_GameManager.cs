@@ -3,35 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class Mini2_GameManager : MonoBehaviour
 {
     public Mini2_player player;
-    //public DontDestory dontDestory;
     public GameObject[] players, stairs, UI;
-    public GameObject pauseBtn, backGround;
-
-    public AudioSource[] sound;
-    public Animator[] anim;
-    public Text finalScoreText, bestScoreText, scoreText;
+    public GameObject backGround;
+    public TMP_Text scoreText;
     public Image gauge;
-    public Button[] settingButtons;
-
-    int score, sceneCount;
-    public bool gaugeStart = false, vibrationOn = true, isGamePaused = false;
+    int score;
+    public bool gaugeStart = false;
     float gaugeRedcutionRate = 0.0025f;
     public bool[] IsChangeDir = new bool[20];
 
     Vector3 beforePos,
-    startPos = new Vector3(-0.8f, -1.5f, 0),
-    leftPos = new Vector3(-0.8f, 0.4f, 0),
-    rightPos = new Vector3(0.8f, 0.4f, 0),
-    leftDir = new Vector3(0.8f, -0.4f, 0),
-    rightDir = new Vector3(-0.8f, -0.4f, 0);
+    startPos = new Vector3(-1.6f, -4.0f, 0),
+    leftPos = new Vector3(-2.6f, 0.8f, 0),
+    rightPos = new Vector3(2.6f, 0.8f, 0),
+    leftDir = new Vector3(2.6f, -0.8f, 0),
+    rightDir = new Vector3(-2.6f, -0.8f, 0);
 
     enum State { start, leftDir, rightDir }
     State state = State.start;
 
+    public GameObject gameOver;
+    public GameObject pauseUI;
+
+    public int genCoins; // 코인 수
+    public int saveCoins;
 
     void Awake()
     {
@@ -43,8 +43,6 @@ public class Mini2_GameManager : MonoBehaviour
         StartCoroutine("CheckGauge");
     }
 
-
-    //Initially Spawn The Stairs
     void StairsInit()
     {
         for (int i = 0; i < 20; i++)
@@ -64,17 +62,22 @@ public class Mini2_GameManager : MonoBehaviour
             }
             beforePos = stairs[i].transform.position;
 
-          
+            if (i != 0)
+            {
+                if (Random.Range(1, 9) < 3 && i < 19)
+                {
+                    if (state == State.leftDir) state = State.rightDir;
+                    else if (state == State.rightDir) state = State.leftDir;
+                    IsChangeDir[(i + 1) % 20] = true;
+                }
+            }
         }
     }
-
-
-
 
     //Spawn The Stairs At The Random Location
     void SpawnStair(int num)
     {
-        IsChangeDir[num + 1 == 20 ? 0 : num + 1] = false;
+        IsChangeDir[(num + 1) % 20] = false;
         beforePos = stairs[num == 0 ? 19 : num - 1].transform.position;
         switch (state)
         {
@@ -85,11 +88,15 @@ public class Mini2_GameManager : MonoBehaviour
                 stairs[num].transform.position = beforePos + rightPos;
                 break;
         }
+
+        if (Random.Range(1, 9) < 3)
+        {
+            if (state == State.leftDir) state = State.rightDir;
+            else if (state == State.rightDir) state = State.leftDir;
+            IsChangeDir[(num + 1) % 20] = true;
+        }
     }
 
-
-
-    //Stairs Moving Along The Direction       
     public void StairMove(int stairIndex, bool isChange, bool isleft)
     {
         if (player.isDie) return;
@@ -106,7 +113,7 @@ public class Mini2_GameManager : MonoBehaviour
             if (stairs[i].transform.position.y < -5) SpawnStair(i);
 
         //Game over if climbing stairs is wrong
-        if (IsChangeDir[stairIndex] != isChange)
+        if (IsChangeDir[(stairIndex + 1) % 20] != isChange)
         {
             GameOver();
             return;
@@ -119,8 +126,6 @@ public class Mini2_GameManager : MonoBehaviour
             new Vector3(0, 4.7f, 0) : new Vector3(0, -0.05f, 0);
     }
 
-
-    //#.Gauge
     void GaugeReduce()
     {
         if (gaugeStart)
@@ -138,7 +143,6 @@ public class Mini2_GameManager : MonoBehaviour
         Invoke("GaugeReduce", 0.01f);
     }
 
-
     IEnumerator CheckGauge()
     {
         while (gauge.fillAmount != 0)
@@ -148,60 +152,36 @@ public class Mini2_GameManager : MonoBehaviour
         GameOver();
     }
 
-
-    void GameOver()
+    public void GameOver()
     {
-        //Animation
-        anim[0].SetBool("GameOver", true);
-        player.anim.SetBool("Die", true);
-
-        //UI
-        ShowScore();
-        pauseBtn.SetActive(false);
-
-        player.isDie = true;
-        player.MoveAnimation();
-
-        CancelInvoke();  //GaugeBar Stopped      
-        Invoke("DisableUI", 1.5f);
+        gauge.fillAmount = 0.0f;
+        gameOver.SetActive(true);
+        CheckScore();
     }
-
-
-    //Show score after game over
-    void ShowScore()
-    {
-        finalScoreText.text = score.ToString();
-    }
-
-
-
-    public void BtnDown(GameObject btn)
-    {
-        btn.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-        if (btn.name == "ClimbBtn") player.Climb(false);
-        else if (btn.name == "ChangeDirBtn") player.Climb(true);
-    }
-
-
-    public void BtnUp(GameObject btn)
-    {
-        btn.transform.localScale = new Vector3(1f, 1f, 1f);
-        if (btn.name == "PauseBtn")
-        {
-            CancelInvoke();  //Gauge Stopped
-            isGamePaused = true;
-        }
-        if (btn.name == "ResumeBtn")
-        {
-            GaugeReduce();
-            isGamePaused = false;
-        }
-    }
-
-
 
     public void homeButton()
     {
         SceneManager.LoadScene("Main");
+    }
+
+    public void GameRetry()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void Restart() // 일시정지 -> 게임으로 돌아가기
+    {
+        Time.timeScale = 1f;
+        pauseUI.SetActive(false);
+    }
+
+    public void CheckScore()
+    {
+        genCoins = score / 30;
+        Debug.Log("생성된 코인 수 : " + genCoins);
+        // PlayerPrefs에 코인 수 저장
+        saveCoins = PlayerPrefs.GetInt("Coins", 0) + genCoins;
+        PlayerPrefs.SetInt("Coins", saveCoins);
+        PlayerPrefs.Save();
     }
 }

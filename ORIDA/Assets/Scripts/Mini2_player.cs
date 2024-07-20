@@ -8,7 +8,7 @@ public class Mini2_player : MonoBehaviour
     public AudioSource[] sound;
     public Mini2_GameManager gameManager;
     public bool isleft = true, isDie = false;
-    public int characterIndex, stairIndex;
+    public int stairIndex;
 
     void Awake()
     {
@@ -48,13 +48,6 @@ public class Mini2_player : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
 
         if (isDie) return;
-        anim.SetBool("Move", true);
-        Invoke("IdleAnimation", 0.05f);
-    }
-
-    public void IdleAnimation()
-    {
-        anim.SetBool("Move", false);
     }
 
 

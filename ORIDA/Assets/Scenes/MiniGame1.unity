@@ -869,7 +869,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 33.5, y: 0}
+  m_AnchoredPosition: {x: 33.5, y: 52.01}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &581780653
@@ -893,7 +893,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\u2022 \uB0A0\uC544\uC624\uB294 \uC801\uC744 \uD574\uCE58\uC6B0\uACE0
-    \uB9CE\uC740 \uC810\uC218\uB97C \uD68D\uB4DD\uD558\uC138\uC694!"
+    \uB9CE\uC740 \uC810\uC218\uB97C \uD68D\uB4DD\uD558\uC138\uC694!\n\n\u2022 \uC870\uC791\uBC95
+    :  WASD -> \uBC29\uD5A5 /  \uC88C\uD074\uB9AD -> \uACF5\uACA9"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a37b279206911d2498f6bbb49fe3fa59, type: 2}
   m_sharedMaterial: {fileID: 5107586288061882720, guid: a37b279206911d2498f6bbb49fe3fa59, type: 2}
@@ -2087,7 +2088,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 999,999,999
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2ad1ee9b3cb09f949b8a46d37d94159c, type: 2}
   m_sharedMaterial: {fileID: -6434584614490705154, guid: 2ad1ee9b3cb09f949b8a46d37d94159c, type: 2}
