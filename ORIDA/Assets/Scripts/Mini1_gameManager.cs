@@ -32,9 +32,6 @@ public class Mini1_gameManager : MonoBehaviour
     public GameObject pauseUI;
 
 
-
-
-
     void Awake()
     {
         Time.timeScale = 0f;
@@ -132,14 +129,6 @@ public class Mini1_gameManager : MonoBehaviour
         playerLogic.isHit = false;
     }
 
-    public void CallExplosion(Vector3 pos, string type)
-    {
-        //GameObject explosion = objectManager.MakeObj("Explosion");
-        //Mini1_explosion explosionLogic = explosion.GetComponent<Mini1_explosion>();
-
-        //explosion.transform.position = pos;
-        //explosionLogic.StartExplosion(type);
-    }
 
     public void GameOver()
     {
