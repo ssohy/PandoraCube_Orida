@@ -13,13 +13,18 @@ public class GameManager : MonoBehaviour
 
     public GameObject myItemUI;
     public GameObject drawItemUI;
-    
 
-    void Awake()
-    {
-        
-        
-    }
+    public GameObject page1UI;
+    public GameObject page2UI;
+
+
+    public GameObject page1Btn;
+    public GameObject page2Btn;
+
+    public GameObject CLOSET;
+    public GameObject HOME;
+
+    public GameObject player;
 
     void Update()
     {
@@ -40,7 +45,16 @@ public class GameManager : MonoBehaviour
 
     public void ClosetLoad()
     {
-        SceneManager.LoadScene("Closet");
+        CLOSET.SetActive(true);
+        HOME.SetActive(false);
+        player.transform.position = new Vector3(5, 0, 0);
+    }
+
+    public void homeButton()
+    {
+        HOME.SetActive(true);
+        CLOSET.SetActive(false);
+        player.transform.position = new Vector3(0, -1, 0);
     }
     public void GameUIstart()
     {
@@ -49,6 +63,15 @@ public class GameManager : MonoBehaviour
     public void GameUIcancle()
     {
         gameUI.SetActive(false);
+    }
+
+    public void Exit()
+    {
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
     }
 
     // #.closet Scene
@@ -62,6 +85,18 @@ public class GameManager : MonoBehaviour
         myItemUI.SetActive(false);
     }
 
+    public void PageBtnON()
+    {
+        page1Btn.SetActive(true);
+        page2Btn.SetActive(true);
+    }
+    public void PageBtnOFF()
+    {
+        page1Btn.SetActive(false);
+        page2Btn.SetActive(false);
+    }
+
+
     public void DrawItem()
     {
         drawItemUI.SetActive(true);
@@ -71,8 +106,22 @@ public class GameManager : MonoBehaviour
         drawItemUI.SetActive(false);
     }
 
-    public void homeButton()
+
+
+    public void Page1()
     {
-        SceneManager.LoadScene("Main");
+        page1UI.SetActive(true);
+    }
+    public void CanclePage1()
+    {
+        page1UI.SetActive(false);
+    }
+    public void Page2()
+    {
+        page2UI.SetActive(true);
+    }
+    public void CanclePage2()
+    {
+        page2UI.SetActive(false);
     }
 }

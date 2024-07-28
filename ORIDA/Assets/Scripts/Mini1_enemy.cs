@@ -52,7 +52,6 @@ public class Mini1_enemy : MonoBehaviour
 
         health -= dmg;
 
-        Debug.Log("¸Â´ÂÁß");
         spriteRenderer.sprite = sprites[1];
         Invoke("ReturnSprite", 0.1f);
 

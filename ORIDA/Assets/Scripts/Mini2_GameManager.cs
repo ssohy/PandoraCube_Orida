@@ -16,6 +16,7 @@ public class Mini2_GameManager : MonoBehaviour
     public bool gaugeStart = false;
     float gaugeRedcutionRate = 0.0025f;
     public bool[] IsChangeDir = new bool[20];
+    private bool isGameOver = false; // 게임 오버 상태 추적
 
     Vector3 beforePos,
     startPos = new Vector3(-1.6f, -4.0f, 0),
@@ -99,7 +100,7 @@ public class Mini2_GameManager : MonoBehaviour
 
     public void StairMove(int stairIndex, bool isChange, bool isleft)
     {
-        if (player.isDie) return;
+        if (player.isDie || isGameOver) return;
 
         //Move stairs to the right or left
         for (int i = 0; i < 20; i++)
@@ -154,6 +155,9 @@ public class Mini2_GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        if (isGameOver) return; // 이미 게임 오버 상태인 경우 종료
+        isGameOver = true; // 게임 오버 상태로 설정
+
         gauge.fillAmount = 0.0f;
         gameOver.SetActive(true);
         CheckScore();
@@ -166,7 +170,7 @@ public class Mini2_GameManager : MonoBehaviour
 
     public void GameRetry()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("MiniGame2");
     }
 
     public void Restart() // 일시정지 -> 게임으로 돌아가기
@@ -177,7 +181,7 @@ public class Mini2_GameManager : MonoBehaviour
 
     public void CheckScore()
     {
-        genCoins = score / 30;
+        genCoins = score / 5;
         Debug.Log("생성된 코인 수 : " + genCoins);
         // PlayerPrefs에 코인 수 저장
         saveCoins = PlayerPrefs.GetInt("Coins", 0) + genCoins;
