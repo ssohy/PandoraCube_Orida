@@ -122,12 +122,12 @@ TextureImporter:
       name: Orida_eyes2_0
       rect:
         serializedVersion: 2
-        x: 892
-        y: 1298
-        width: 414
-        height: 208
+        x: 740
+        y: 973
+        width: 700
+        height: 700
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
