@@ -10,7 +10,6 @@ public class GachaManager : MonoBehaviour
     public List<GameObject> item; // 뽑힌 아이템
 
     public GameObject DrawUI;
-
     public GameObject noCoinTxt;
     public GameObject allItemTxt;
 
@@ -21,6 +20,7 @@ public class GachaManager : MonoBehaviour
         coins = PlayerPrefs.GetInt("Coins", 0);
         drawnIndices = new HashSet<int>(); // HashSet 초기화
 
+        LoadDrawnIndices(); // 뽑힌 번호 로드
         LoadObjectStates(); // 오브젝트 상태 로드
     }
 
@@ -32,6 +32,11 @@ public class GachaManager : MonoBehaviour
             {
                 Draw();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R)) // 'R' 키를 눌러 초기화 수행
+        {
+            ResetPlayerPrefs();
         }
     }
 
@@ -60,11 +65,11 @@ public class GachaManager : MonoBehaviour
             PlayerPrefs.SetInt("Object" + randomIndex, 0); // 상태 저장
             PlayerPrefs.Save();
 
-            
             item[randomIndex].SetActive(true);
-            item[randomIndex].transform.position = new Vector3(170, 130, 0);
             Debug.Log("활성화");
             StartCoroutine(DrawedItem(randomIndex, 2f)); // 2초 후에 아이템 비활성화
+
+            SaveDrawnIndices(); // 뽑힌 번호 저장
         }
         else
         {
@@ -99,6 +104,41 @@ public class GachaManager : MonoBehaviour
             int state = PlayerPrefs.GetInt("Object" + i, 1); // 기본값은 활성화 상태 (1)
             objects[i].SetActive(state == 1);
         }
+    }
+
+    void SaveDrawnIndices()
+    {
+        PlayerPrefs.SetInt("DrawnIndicesCount", drawnIndices.Count);
+        int index = 0;
+        foreach (int drawnIndex in drawnIndices)
+        {
+            PlayerPrefs.SetInt("DrawnIndex_" + index, drawnIndex);
+            index++;
+        }
+        PlayerPrefs.Save();
+    }
+
+    void LoadDrawnIndices()
+    {
+        int count = PlayerPrefs.GetInt("DrawnIndicesCount", 0);
+        for (int i = 0; i < count; i++)
+        {
+            int drawnIndex = PlayerPrefs.GetInt("DrawnIndex_" + i);
+            drawnIndices.Add(drawnIndex);
+        }
+    }
+
+    void ResetPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+        drawnIndices.Clear();
+        foreach (var obj in objects)
+        {
+            obj.SetActive(true);
+        }
+        coins = 0;
+        Debug.Log("PlayerPrefs has been reset.");
     }
 
     IEnumerator DrawedItem(int index, float delay)

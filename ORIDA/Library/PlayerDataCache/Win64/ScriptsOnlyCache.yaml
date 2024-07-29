@@ -70,6 +70,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
@@ -141,6 +145,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
@@ -209,6 +217,10 @@ ScriptsOnlyBuild:
     - Class: 61
       Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -787,7 +799,7 @@ ScriptsOnlyBuild:
     className: SignalTrack
   - hash:
       serializedVersion: 2
-      Hash: fc214bb20f4dfccf52941a1a5b9ecea2
+      Hash: 6bad2f941c3ea0035f4a2a13d224652d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Mini1_player
@@ -913,7 +925,7 @@ ScriptsOnlyBuild:
     className: TMP_SubMeshUI
   - hash:
       serializedVersion: 2
-      Hash: bcecf39084f1c1cd1a6e62c24bb9542a
+      Hash: e44d9649901b3313b1839e3a7ea72e6e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Mini2_GameManager
@@ -949,7 +961,7 @@ ScriptsOnlyBuild:
     className: VertexColorCycler
   - hash:
       serializedVersion: 2
-      Hash: 60dc4a7ba102f44838f49e0fdebfbb38
+      Hash: 4ce9447c3ad3e2d58c87d164022d7154
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ItemManager

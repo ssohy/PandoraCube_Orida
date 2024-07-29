@@ -26,6 +26,14 @@ public class GameManager : MonoBehaviour
 
     public GameObject player;
 
+    /*
+    private void Awake()
+    {
+        coins = 0;
+        PlayerPrefs.SetInt("Coins", coins);
+        PlayerPrefs.Save();
+    }
+    */
     void Update()
     {
         coins = PlayerPrefs.GetInt("Coins", 0);

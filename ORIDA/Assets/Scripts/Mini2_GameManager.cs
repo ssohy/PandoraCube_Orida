@@ -17,6 +17,7 @@ public class Mini2_GameManager : MonoBehaviour
     float gaugeRedcutionRate = 0.0025f;
     public bool[] IsChangeDir = new bool[20];
     private bool isGameOver = false; // 게임 오버 상태 추적
+    public TMP_Text coinsText;
 
     Vector3 beforePos,
     startPos = new Vector3(-1.6f, -4.0f, 0),
@@ -181,7 +182,8 @@ public class Mini2_GameManager : MonoBehaviour
 
     public void CheckScore()
     {
-        genCoins = score / 5;
+        genCoins = score / 100;
+        coinsText.text = string.Format("{0:n0}", genCoins);
         Debug.Log("생성된 코인 수 : " + genCoins);
         // PlayerPrefs에 코인 수 저장
         saveCoins = PlayerPrefs.GetInt("Coins", 0) + genCoins;

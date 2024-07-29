@@ -38,6 +38,8 @@ public class ItemManager : MonoBehaviour
         AddSlotToDictionary("furniture", home);
         AddSlotToDictionary("doll", home);
         AddSlotToDictionary("pet", home);
+
+        LoadEquippedItems(); // 장착된 아이템 로드
     }
 
     void AddSlotToDictionary(string slotName, Transform parent)
@@ -60,11 +62,27 @@ public class ItemManager : MonoBehaviour
         Item item = items[itemIndex];
         if (equipSlots.ContainsKey(item.equipSlot))
         {
-            // 같은 슬롯에 이미 장착된 아이템이 있다면 해제
+            // 같은 슬롯에 이미 장착된 아이템이 있는지 확인
             if (equippedItems.ContainsKey(item.equipSlot))
             {
-                Destroy(equippedItems[item.equipSlot]);
-                equippedItems.Remove(item.equipSlot);
+                GameObject currentEquippedItem = equippedItems[item.equipSlot];
+
+                // 이미 장착된 아이템을 다시 클릭한 경우, 해당 아이템 해제
+                if (currentEquippedItem.name == item.itemName)
+                {
+                    Destroy(currentEquippedItem);
+                    equippedItems.Remove(item.equipSlot);
+                    PlayerPrefs.DeleteKey(item.equipSlot);
+                    PlayerPrefs.Save();
+                    Debug.Log("아이템 해제: " + item.itemName);
+                    return;
+                }
+                else
+                {
+                    // 다른 아이템이 장착된 경우 기존 아이템 해제
+                    Destroy(currentEquippedItem);
+                    equippedItems.Remove(item.equipSlot);
+                }
             }
 
             // 아이템을 장착
@@ -89,8 +107,11 @@ public class ItemManager : MonoBehaviour
                 spriteRenderer.sortingLayerName = "Foreground"; // 레이어 이름 설정
                 spriteRenderer.sortingOrder = 5; // 정렬 순서 설정
             }
-            Debug.Log("클릭중");
+
+            Debug.Log("아이템 장착: " + item.itemName);
             equippedItems[item.equipSlot] = newEquippedItem; // 장착된 아이템 딕셔너리에 추가
+
+            SaveEquippedItem(item); // 장착된 아이템 저장
         }
         else
         {
@@ -105,5 +126,37 @@ public class ItemManager : MonoBehaviour
             Destroy(equippedItem);
         }
         equippedItems.Clear();
+        ClearSavedEquippedItems(); // 저장된 장착 정보 초기화
+    }
+
+    void SaveEquippedItem(Item item)
+    {
+        PlayerPrefs.SetString(item.equipSlot, item.itemName);
+        PlayerPrefs.Save();
+    }
+
+    void LoadEquippedItems()
+    {
+        foreach (var slot in equipSlots.Keys)
+        {
+            if (PlayerPrefs.HasKey(slot))
+            {
+                string itemName = PlayerPrefs.GetString(slot);
+                Item item = items.Find(i => i.itemName == itemName);
+                if (item != null)
+                {
+                    Put_On(items.IndexOf(item)); // 아이템 장착
+                }
+            }
+        }
+    }
+
+    void ClearSavedEquippedItems()
+    {
+        foreach (var slot in equipSlots.Keys)
+        {
+            PlayerPrefs.DeleteKey(slot);
+        }
+        PlayerPrefs.Save();
     }
 }
