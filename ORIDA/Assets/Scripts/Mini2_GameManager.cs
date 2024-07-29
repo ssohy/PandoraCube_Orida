@@ -181,7 +181,7 @@ public class Mini2_GameManager : MonoBehaviour
 
     public void CheckScore()
     {
-        genCoins = score / 5;
+        genCoins = score / 100;
         Debug.Log("积己等 内牢 荐 : " + genCoins);
         // PlayerPrefs俊 内牢 荐 历厘
         saveCoins = PlayerPrefs.GetInt("Coins", 0) + genCoins;
