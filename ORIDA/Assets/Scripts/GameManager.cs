@@ -6,7 +6,6 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-
     public GameObject gameUI;
     public int coins;
     public TMP_Text coinsText;
@@ -17,7 +16,6 @@ public class GameManager : MonoBehaviour
     public GameObject page1UI;
     public GameObject page2UI;
 
-
     public GameObject page1Btn;
     public GameObject page2Btn;
 
@@ -26,14 +24,13 @@ public class GameManager : MonoBehaviour
 
     public GameObject player;
 
-    /*
-    private void Awake()
+    void Awake()
     {
-        coins = 0;
-        PlayerPrefs.SetInt("Coins", coins);
-        PlayerPrefs.Save();
+        // PlayerPrefs에서 코인 값 가져오기
+        coins = PlayerPrefs.GetInt("Coins", 0);
+        Debug.Log("현재 코인 : " + coins);
     }
-    */
+
     void Update()
     {
         coins = PlayerPrefs.GetInt("Coins", 0);
@@ -78,7 +75,7 @@ public class GameManager : MonoBehaviour
         #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
         #else
-                Application.Quit();
+                    Application.Quit();
         #endif
     }
 
@@ -104,7 +101,6 @@ public class GameManager : MonoBehaviour
         page2Btn.SetActive(false);
     }
 
-
     public void DrawItem()
     {
         drawItemUI.SetActive(true);
@@ -113,8 +109,6 @@ public class GameManager : MonoBehaviour
     {
         drawItemUI.SetActive(false);
     }
-
-
 
     public void Page1()
     {

@@ -14,6 +14,7 @@ public class GachaManager : MonoBehaviour
     public GameObject allItemTxt;
 
     private HashSet<int> drawnIndices; // 이미 뽑힌 번호를 저장할 HashSet
+    private int curCoin;
 
     void Start()
     {
@@ -26,6 +27,7 @@ public class GachaManager : MonoBehaviour
 
     void Update()
     {
+        coins = PlayerPrefs.GetInt("Coins", 0);
         if (Input.GetKeyDown(KeyCode.G)) // 'G' 키를 눌러 뽑기 수행
         {
             if (DrawUI.activeSelf) // DrawUI가 활성화된 경우에만
@@ -38,8 +40,19 @@ public class GachaManager : MonoBehaviour
         {
             ResetPlayerPrefs();
         }
+
+        if (Input.GetKeyDown(KeyCode.P)) // 'P' 키를 눌러 코인늘리기
+        {
+            coinInc();
+        }
     }
 
+    void coinInc()
+    {
+        curCoin = PlayerPrefs.GetInt("Coins", 0);
+        PlayerPrefs.SetInt("Coins", ++curCoin);
+        PlayerPrefs.Save();
+    }
     void Draw()
     {
         if (coins < coinsPerDraw)
