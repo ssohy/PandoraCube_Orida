@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
 
 public class Mini1_player : MonoBehaviour
 {
@@ -30,6 +32,7 @@ public class Mini1_player : MonoBehaviour
     public bool isHit;
     public bool isBoomTime;
 
+    public TMP_Text coinsText;
 
     public GameObject bulletObj; // 총알 오브젝트
     //public GameObject boomEffect;
@@ -268,6 +271,7 @@ public class Mini1_player : MonoBehaviour
     public void CheckScore()
     {
         genCoins = score / 100;
+        coinsText.text = string.Format("{0:n0}", genCoins);
         Debug.Log("생성된 코인 수 : " + genCoins);
         // PlayerPrefs에 코인 수 저장
         saveCoins = PlayerPrefs.GetInt("Coins", 0) + genCoins;
