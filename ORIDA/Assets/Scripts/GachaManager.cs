@@ -38,12 +38,12 @@ public class GachaManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R)) // 'R' 키를 눌러 초기화 수행
         {
-            ResetPlayerPrefs();
+           //ResetPlayerPrefs();
         }
 
         if (Input.GetKeyDown(KeyCode.P)) // 'P' 키를 눌러 코인늘리기
         {
-            coinInc();
+            //coinInc();
         }
     }
 

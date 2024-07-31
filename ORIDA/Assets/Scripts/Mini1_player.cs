@@ -270,7 +270,7 @@ public class Mini1_player : MonoBehaviour
 
     public void CheckScore()
     {
-        genCoins = score / 100;
+        genCoins = score / 80;
         coinsText.text = string.Format("{0:n0}", genCoins);
         Debug.Log("积己等 内牢 荐 : " + genCoins);
         // PlayerPrefs俊 内牢 荐 历厘

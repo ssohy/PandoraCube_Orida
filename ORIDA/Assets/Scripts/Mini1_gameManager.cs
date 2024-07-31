@@ -59,6 +59,11 @@ public class Mini1_gameManager : MonoBehaviour
         // #.UI Score Update
         Mini1_player playerLogic = player.GetComponent<Mini1_player>();
         scoreText.text = string.Format("{0:n0}", playerLogic.score);
+
+        if (Input.GetKeyDown(KeyCode.Escape)) // 'esc' 키를 눌러 정보창 스킵
+        {
+            Restart();
+        }
     }
 
     void SpawnEnemy()
@@ -143,7 +148,7 @@ public class Mini1_gameManager : MonoBehaviour
 
     public void GameRetry()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("MiniGame1");
     }
 
     public void homeButton()
