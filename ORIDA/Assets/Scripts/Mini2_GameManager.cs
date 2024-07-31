@@ -44,7 +44,13 @@ public class Mini2_GameManager : MonoBehaviour
         GaugeReduce();
         StartCoroutine("CheckGauge");
     }
-
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) // 'esc' 키를 눌러 정보창 스킵
+        {
+            Restart();
+        }
+    }
     void StairsInit()
     {
         for (int i = 0; i < 20; i++)
@@ -182,7 +188,7 @@ public class Mini2_GameManager : MonoBehaviour
 
     public void CheckScore()
     {
-        genCoins = score / 100;
+        genCoins = score / 80;
         coinsText.text = string.Format("{0:n0}", genCoins);
         Debug.Log("생성된 코인 수 : " + genCoins);
         // PlayerPrefs에 코인 수 저장

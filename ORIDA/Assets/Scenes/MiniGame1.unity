@@ -1284,8 +1284,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Mini2_GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1668946844}
+        m_TargetAssemblyTypeName: Mini1_gameManager, Assembly-CSharp
         m_MethodName: GameRetry
         m_Mode: 1
         m_Arguments:
