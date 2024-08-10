@@ -15,6 +15,7 @@ public class GachaManager : MonoBehaviour
 
     private HashSet<int> drawnIndices; // 이미 뽑힌 번호를 저장할 HashSet
     private int curCoin;
+    private bool canDraw = true; // G 키 입력을 허용할지 여부를 결정하는 변수
 
     void Start()
     {
@@ -28,7 +29,7 @@ public class GachaManager : MonoBehaviour
     void Update()
     {
         coins = PlayerPrefs.GetInt("Coins", 0);
-        if (Input.GetKeyDown(KeyCode.G)) // 'G' 키를 눌러 뽑기 수행
+        if (canDraw && Input.GetKeyDown(KeyCode.G)) // 'G' 키를 눌러 뽑기 수행 (canDraw가 true일 때만)
         {
             if (DrawUI.activeSelf) // DrawUI가 활성화된 경우에만
             {
@@ -38,12 +39,12 @@ public class GachaManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R)) // 'R' 키를 눌러 초기화 수행
         {
-           //ResetPlayerPrefs();
+            //ResetPlayerPrefs();
         }
 
         if (Input.GetKeyDown(KeyCode.P)) // 'P' 키를 눌러 코인늘리기
         {
-            //coinInc();
+            coinInc();
         }
     }
 
@@ -53,6 +54,7 @@ public class GachaManager : MonoBehaviour
         PlayerPrefs.SetInt("Coins", ++curCoin);
         PlayerPrefs.Save();
     }
+
     void Draw()
     {
         if (coins < coinsPerDraw)
@@ -80,6 +82,8 @@ public class GachaManager : MonoBehaviour
 
             item[randomIndex].SetActive(true);
             Debug.Log("활성화");
+
+            canDraw = false; // 2초 동안 G 키 입력 비활성화
             StartCoroutine(DrawedItem(randomIndex, 2f)); // 2초 후에 아이템 비활성화
 
             SaveDrawnIndices(); // 뽑힌 번호 저장
@@ -158,6 +162,7 @@ public class GachaManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         item[index].SetActive(false);
+        canDraw = true; // 2초 후 G 키 입력을 다시 허용
     }
 
     IEnumerator Done(float delay)
