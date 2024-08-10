@@ -10,14 +10,15 @@ public class GameManager : MonoBehaviour
     public int coins;
     public TMP_Text coinsText;
 
-    public GameObject myItemUI;
+    public GameObject Draw;
     public GameObject drawItemUI;
+    private CanvasGroup DrawCanvasGroup;
+
+    public GameObject Mine;
+    private CanvasGroup MineCanvasGroup;
 
     public GameObject page1UI;
     public GameObject page2UI;
-
-    public GameObject page1Btn;
-    public GameObject page2Btn;
 
     public GameObject CLOSET;
     public GameObject HOME;
@@ -29,12 +30,49 @@ public class GameManager : MonoBehaviour
         // PlayerPrefs에서 코인 값 가져오기
         coins = PlayerPrefs.GetInt("Coins", 0);
         Debug.Log("현재 코인 : " + coins);
+
+        // CanvasGroup 초기화
+        DrawCanvasGroup = Draw.GetComponent<CanvasGroup>();
+        if (DrawCanvasGroup == null)
+        {
+            DrawCanvasGroup = Draw.AddComponent<CanvasGroup>();
+        }
+
+        MineCanvasGroup = Mine.GetComponent<CanvasGroup>();
+        if (MineCanvasGroup == null)
+        {
+            MineCanvasGroup = Mine.AddComponent<CanvasGroup>();
+        }
     }
 
     void Update()
     {
         coins = PlayerPrefs.GetInt("Coins", 0);
         coinsText.text = string.Format("{0:n0}", coins);
+
+        // page1UI 또는 page2UI가 활성화되어 있으면 Draw 비활성화
+        if (page1UI.activeSelf || page2UI.activeSelf)
+        {
+            DrawCanvasGroup.interactable = false;
+            DrawCanvasGroup.blocksRaycasts = false;
+        }
+        else
+        {
+            DrawCanvasGroup.interactable = true;
+            DrawCanvasGroup.blocksRaycasts = true;
+        }
+
+        // drawItemUI가 활성화되어 있으면 Mine 비활성화
+        if (drawItemUI.activeSelf)
+        {
+            MineCanvasGroup.interactable = false;
+            MineCanvasGroup.blocksRaycasts = false;
+        }
+        else
+        {
+            MineCanvasGroup.interactable = true;
+            MineCanvasGroup.blocksRaycasts = true;
+        }
     }
 
     // #.Main Scene
@@ -75,32 +113,11 @@ public class GameManager : MonoBehaviour
         #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
         #else
-                    Application.Quit();
+                        Application.Quit();
         #endif
     }
 
     // #.closet Scene
-    public void SelectingItem()
-    {
-        myItemUI.SetActive(true);
-    }
-
-    public void CancleSelectingItem()
-    {
-        myItemUI.SetActive(false);
-    }
-
-    public void PageBtnON()
-    {
-        page1Btn.SetActive(true);
-        page2Btn.SetActive(true);
-    }
-    public void PageBtnOFF()
-    {
-        page1Btn.SetActive(false);
-        page2Btn.SetActive(false);
-    }
-
     public void DrawItem()
     {
         drawItemUI.SetActive(true);
