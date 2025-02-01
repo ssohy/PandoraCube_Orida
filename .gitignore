@@ -74,3 +74,6 @@ crashlytics-build.properties
 
 # 업로드 안되는 파일
 ORIDA/Temp/UnityLockfile
+
+## 서버 관련
+ORIDA_Server/db/db.js
