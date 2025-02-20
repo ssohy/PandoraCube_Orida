@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const usersRouter = require('./routes/users');
 const app = express();
 
 // 설정
@@ -7,14 +8,12 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // 라우트 설정
-
+app.use('/api/users', usersRouter);
 
 // 뷰 라우트 설정
 app.get('/', (req, res) => {
     res.render('signin', { title: 'Sign In' });
 });
-
-
 
 app.get('/signup', (req, res) => {
     res.render('signup', { title: 'Sign Up' });
@@ -26,7 +25,6 @@ app.get('/signin', (req, res) => {
 
 // 로그아웃 라우트
 app.post('/logout', (req, res) => {
-    //res.clearCookie('USER');
     res.redirect('/signin');
 });
 
